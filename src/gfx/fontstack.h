@@ -13,6 +13,7 @@
 
 #include <cairo/cairo.h>
 
+#include <memory>
 #include <string>
 
 namespace NAMix
@@ -42,14 +43,22 @@ public:
     }
 
 private:
-    // Owns the returned face; sets *outFt to the FT_Face to destroy later.
+    // Returns a cairo face that OWNS the FT_Face behind it and a reference to the FreeType
+    // library (see the comment on the destructor in fontstack.cpp). *outFt is set to the FT_Face
+    // purely so load() can tell a real face from a toy fallback.
     cairo_font_face_t *loadFace(const std::string &path, bool bold, void **outFt);
 
     cairo_font_face_t *mTitle = nullptr;
     cairo_font_face_t *mBody = nullptr;
-    void *mTitleFt = nullptr; // FT_Face, destroyed after the cairo face
+
+    // Observers, NOT owners: the FT_Face belongs to the cairo font face above and is freed by
+    // cairo, which may be long after this object dies. Never FT_Done_Face these.
+    void *mTitleFt = nullptr;
     void *mBodyFt = nullptr;
-    void *mLibrary = nullptr; // FT_Library
+
+    // FT_Library, held by shared_ptr because each face keeps a reference of its own: the library
+    // must outlive every face opened from it, and cairo decides when those die.
+    std::shared_ptr<void> mLibrary;
 };
 
 } // namespace NAMix
