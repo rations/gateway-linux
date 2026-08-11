@@ -61,38 +61,40 @@ those are only for building from source.
 
 ## Installing the pre-built release
 
-Download `NAMix-0.5.0-linux-x86_64.tar.gz` from the
-[Releases page](https://github.com/rations/NAMix/releases).
+Download the `NAMix-<version>-linux-x86_64.tar.gz` asset from the
+[latest release](https://github.com/rations/NAMix/releases/latest).
 
-Extract the archive:
+Extract it and enter the directory it creates — the version is part of both
+names, so let the shell fill it in:
 
 ```bash
-tar -xzf NAMix-0.5.0-linux-x86_64.tar.gz
+tar -xzf NAMix-*-linux-x86_64.tar.gz
+cd NAMix-*/
 ```
 
-This creates a `NAMix-0.5.0/` directory containing both binaries. Install
-whichever you need:
+(If you keep several versions side by side, name the one you want instead of
+using the glob.) The directory holds both binaries; install whichever you need.
 
 **VST3 plugin** — copy into your user VST3 folder:
 
 ```bash
 mkdir -p ~/.vst3
-cp -r NAMix-0.5.0/NAMix.vst3 ~/.vst3/
+cp -r NAMix.vst3 ~/.vst3/
 ```
 
 The plugin will appear as **NAMix** in any VST3-capable DAW.
 
-**Standalone application** — run directly from the extracted directory, with a
-JACK server already running:
+**Standalone application** — run it from that same directory, with a JACK
+server already running:
 
 ```bash
-./NAMix-0.5.0/namix-standalone
+./namix-standalone
 ```
 
-To uninstall:
+To uninstall, remove the installed plugin and the directory you extracted:
 
 ```bash
-rm -rf ~/.vst3/NAMix.vst3 ~/NAMix-0.5.0
+rm -rf ~/.vst3/NAMix.vst3
 ```
 
 ---
